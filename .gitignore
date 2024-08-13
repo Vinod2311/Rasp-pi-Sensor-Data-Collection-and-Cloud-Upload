@@ -1,0 +1,4 @@
+testMongoConnection/node_modules
+venv
+vinod.code-workspace
+testMongoConnection/mongo*
