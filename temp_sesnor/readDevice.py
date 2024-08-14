@@ -2,9 +2,10 @@ import time
 import adafruit_dht
 import board
 
-dht_device = adafruit_dht.DHT22(board.D17)
+
 
 def readTempandHumidity():
+  dht_device = adafruit_dht.DHT22(board.D17)
   result = None
   while result == None:
     try:
@@ -12,7 +13,6 @@ def readTempandHumidity():
       humidity = dht_device.humidity
       result = temperature,humidity
     except RuntimeError as err:
-      time.sleep(2.0)
       error = err.args[0]
       pass
       #print(err.args[0])
@@ -21,6 +21,6 @@ def readTempandHumidity():
   dht_device.exit()
   return result
 
-#readTempandHumidity()
+readTempandHumidity()
 
 

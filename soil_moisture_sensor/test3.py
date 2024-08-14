@@ -22,7 +22,7 @@ def readData():
   
   pot = MCP3008(0)
   reading = pot.value
-  #print(reading)
+  print(reading)
   return reading
 
 readData()
