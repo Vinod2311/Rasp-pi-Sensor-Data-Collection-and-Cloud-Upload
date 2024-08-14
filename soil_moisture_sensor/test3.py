@@ -2,8 +2,10 @@ from gpiozero import MCP3008
 from time import sleep
 import sys
 
+#sys.path.append('.')
+
 #create an object that refers to MCP3008 channel 0
-pot = MCP3008(0)
+#pot = MCP3008(0)
 
 #The capacitance is read via the soil moisture sensor. 
 #Range of values is used to convert to 100 point scale 
@@ -14,6 +16,13 @@ pot = MCP3008(0)
 #    reading = pot.value
 #    print(reading)
 #    sleep(0.1)
-reading = pot.value
+#reading = pot.value
 
-print(reading)
+def readData():
+  
+  pot = MCP3008(0)
+  reading = pot.value
+  #print(reading)
+  return reading
+
+readData()

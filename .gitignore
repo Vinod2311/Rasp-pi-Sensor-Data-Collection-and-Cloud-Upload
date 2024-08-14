@@ -1,4 +1,6 @@
-testMongoConnection/node_modules
+mongoConnection/node_modules
 venv
 vinod.code-workspace
-testMongoConnection/mongo*
+mongoConnection/mongo*
+mongodb-realm
+uploadSensorData/node_modules
