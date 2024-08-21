@@ -17,21 +17,21 @@ import json
 def writeReadingData(file):
   reading = dict()
   soilMoisture = readSoilMoisture()
-  reading.update({"soilMoisture": soilMoisture})
+  reading.update({"soilMoisture(RH)": soilMoisture})
 
   lightIntensity = readLightIntensity()
   reading.update({"lightIntensity(lux)": lightIntensity})
 
-  tempAndHumidity = readTempandHumidity()
-  temperature = tempAndHumidity[0]
-  reading.update({"temperature(*C)": temperature})
-  humidity = tempAndHumidity[1]
-  reading.update({"humidity(RH)": humidity})
+  #tempAndHumidity = readTempandHumidity()
+  #temperature = tempAndHumidity[0]
+  #reading.update({"temperature DHT22(*C)": temperature})
+  #humidity = tempAndHumidity[1]
+  #reading.update({"humidity(RH)": humidity})
 
   tempAndPressure = readTempAndPressure()
   #print(tempAndPressure)
   temperature2 = tempAndPressure[0]
-  reading.update({"temperature 2(*C)":temperature2})
+  reading.update({"temperature BMP280(*C)":temperature2})
   pressure = tempAndPressure[1]
   reading.update({"Pressure(hPa)":pressure})
 

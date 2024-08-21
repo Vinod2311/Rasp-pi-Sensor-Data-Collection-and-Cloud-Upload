@@ -9,8 +9,8 @@ def readTempandHumidity():
   result = None
   while result == None:
     try:
-      temperature = dht_device.temperature
-      humidity = dht_device.humidity
+      temperature = round(dht_device.temperature,2)
+      humidity = round(dht_device.humidity,2)
       result = temperature,humidity
     except RuntimeError as err:
       error = err.args[0]
@@ -21,6 +21,6 @@ def readTempandHumidity():
   dht_device.exit()
   return result
 
-readTempandHumidity()
+#readTempandHumidity()
 
 

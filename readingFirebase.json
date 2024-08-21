@@ -1,1 +1,1 @@
-{"soilMoisture": 18.95, "lightIntensity(lux)": 17.5, "temperature(*C)": null, "humidity(RH)": null, "temperature 2(*C)": 22.900743437567417, "Pressure(hPa)": 1687.0563307215991}
+{"soilMoisture(RH)": 27.86, "lightIntensity(lux)": 15.83, "temperature BMP280(*C)": 21.74, "Pressure(hPa)": 1683.94}

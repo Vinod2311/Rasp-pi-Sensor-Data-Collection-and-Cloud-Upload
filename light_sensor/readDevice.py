@@ -27,7 +27,7 @@ def readDevice(addr=DEVICE):
 
 def readLightIntensity():    
   try: 
-    lightLevel = readDevice()
+    lightLevel = round(readDevice(),2)
     #print("Light Level : {:.2f}lx".format(lightLevel)) 
   except RuntimeError as err:
       error = err.args[0]

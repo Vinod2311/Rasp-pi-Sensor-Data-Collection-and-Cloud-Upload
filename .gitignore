@@ -9,3 +9,4 @@ photos
 **/__pycache__
 dummy.py
 **/__pycache__
+**/node_modules

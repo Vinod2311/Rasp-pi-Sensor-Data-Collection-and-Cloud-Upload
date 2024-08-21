@@ -3,9 +3,10 @@ import data from '../readingFirebase.json' with { type: 'json' };
 import {getStorage,ref as refStorage,uploadBytes}  from 'firebase/storage'
 import { initializeApp,deleteApp } from 'firebase/app'
 import { getAuth, createUserWithEmailAndPassword,signInWithEmailAndPassword } from "firebase/auth"
-import { getDatabase, set, push, child, update, ref } from "firebase/database";
+import { getDatabase, set, get, push, child, update, ref, onValue } from "firebase/database";
 import * as fs from 'node:fs'
 import path from 'node:path';
+
 
 //const x = path.resolve(import.meta.dirname, '../file.xml')
 //console.log(x)
@@ -13,20 +14,20 @@ import path from 'node:path';
 
 
 const firebaseConfig = {
-  apiKey: "AIzaSyD7_zof5JzNwklR-j4p2K--SjQJP36XBX4",
-  authDomain: "plant-health-ce7eb.firebaseapp.com",
-  databaseURL: "https://plant-health-ce7eb-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "plant-health-ce7eb",
-  storageBucket: "plant-health-ce7eb.appspot.com",
-  messagingSenderId: "200030059955",
-  appId: "1:200030059955:web:0e38206315d84abbec5fc6",
-  measurementId: "G-ZVESSKYMD4"
+  apiKey: "AIzaSyCHfnIcqTbOKuKtizPN4qUp6_AuwABENF8",
+  authDomain: "raspberry-pi-plant-monitoring.firebaseapp.com",
+  databaseURL: "https://raspberry-pi-plant-monitoring-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "raspberry-pi-plant-monitoring",
+  storageBucket: "raspberry-pi-plant-monitoring.appspot.com",
+  messagingSenderId: "656085848146",
+  appId: "1:656085848146:web:d899dd1a52857536610f8b",
+  measurementId: "G-XZ4ZSM1J4X"
 };
 
 const currentUser = {
   fName: "Joe",
   lName: "Bloggs",
-  email: "sample@sample.com",
+  email: "test@test.com",
   password: "secret"
 };
 
@@ -81,22 +82,38 @@ async function signInUserFirebase(){
 }
 
 //createUserFirebase()
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
 
 async function uploadDataFirebase(){
   try {
     await createUserFirebase()
-    await uploadImage()
+    //await uploadImage()
     const firebaseData = {
     
       ...data,
       timestamp: Date.now(),
       ownerName: currentUser["fName"] + " " + currentUser["lName"],
-      raspberryId: "To be filled"
+      
     }
     const userData = {fName: currentUser["fName"], lName: currentUser["lName"], email: currentUser["email"]}
     //console.log(firebaseData)
     await update(ref(firebaseDatabase,'users/' + userFirebase.uid +'/'  ),userData)
     const result = await set(ref(firebaseDatabase,'users/' + userFirebase.uid +'/readings/'+  firebaseData.timestamp.toString()  ),firebaseData)
+    //await find(ref(firebaseDatabase,'users/' + userFirebase.uid +'/config/' ),)
+    const dbRef = ref(firebaseDatabase);
+    await get(child(dbRef, `users/${userFirebase.uid}/config`)).then(async (snapshot) => {
+    if (snapshot.exists()) {
+      
+      console.log(snapshot.val());
+      await sleep(snapshot.val().firebaseDBFrequency*1000)
+    } else {
+      console.log("No data available");
+    }
+    }).catch((error) => {
+      console.error(error);
+    });
     //deleteApp(firebaseApp)
     //return
   } catch(error){
@@ -104,9 +121,9 @@ async function uploadDataFirebase(){
   } finally {
     console.log("exit")
     //await deleteApp(firebaseApp)
-    process.exit()
+    
   }
-  
+  process.exit()
 
 };
 

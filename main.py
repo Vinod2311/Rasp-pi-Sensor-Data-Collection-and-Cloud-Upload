@@ -6,7 +6,7 @@ from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
 from multiprocessing import Process
 import time
 import threading
-from writeSensorReading.testWrite import writeReadingData
+from writeSensorReading.writeData import writeReadingData
 
 
 def checkSensorReadingFileExists():
@@ -27,27 +27,27 @@ def checkMongoConnection():
 
 
 
-def uploadToMongo(frequency):
+def uploadToMongo():
   #print("mongoLoop")
   while True:
     writeReadingData('readingMongo.json')
     uploadResultMongo = subprocess.run(["node", "uploadSensorData/uploadMongo.js"], capture_output=True, text=True)
     if (uploadResultMongo.returncode == 0):
       print('Uploaded to MongoDB')
-      time.sleep(frequency)
+      
     else:
       print(uploadResultMongo)
       print("Upload to Mongo Failed")
       quit()
 
-def uploadToFirebase(frequency):
+def uploadToFirebase():
   
   while True:
     writeReadingData('readingFirebase.json')
     uploadResultFirebase = subprocess.run(["node", "uploadSensorData/uploadFirebase.js"], capture_output=True, text=True)
     if (uploadResultFirebase.returncode == 0):
       print('Uploaded to Firebase \n')
-      time.sleep(frequency)
+      
     else:
       print(uploadResultFirebase)
       print("Upload to Firebase Failed")
@@ -68,10 +68,10 @@ def main():
   #t2 = threading.Thread(target=uploadToMongo,args=(10,))
   #t2.start()
 
-  uploadToFirebaseProcess = Process(target=uploadToFirebase, args=(10,))
+  uploadToFirebaseProcess = Process(target=uploadToFirebase)
   uploadToFirebaseProcess.start()
 
-  uploadToMongoProcess = Process(target=uploadToMongo,args=(600,))
+  uploadToMongoProcess = Process(target=uploadToMongo)
   uploadToMongoProcess.start()
 
   uploadToFirebaseProcess.join()
