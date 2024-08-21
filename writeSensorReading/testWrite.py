@@ -8,25 +8,36 @@ sys.path.insert(0, os.path.abspath('./'))
 
 from soil_moisture_sensor.readDevice import readSoilMoisture
 from light_sensor.readDevice import readLightIntensity
-from temp_sesnor.readDevice import readTempandHumidity
+from temp_and_humidity_sensor.readDevice import readTempandHumidity
+from temp_and_pressure_sensor.readDevice import readTempAndPressure
 import time
 from datetime import datetime
 import json
 
-def writeReadingData():
+def writeReadingData(file):
   reading = dict()
   soilMoisture = readSoilMoisture()
   reading.update({"soilMoisture": soilMoisture})
+
   lightIntensity = readLightIntensity()
-  reading.update({"lightIntensity": lightIntensity})
+  reading.update({"lightIntensity(lux)": lightIntensity})
+
   tempAndHumidity = readTempandHumidity()
   temperature = tempAndHumidity[0]
-  reading.update({"temperature": temperature})
+  reading.update({"temperature(*C)": temperature})
   humidity = tempAndHumidity[1]
-  reading.update({"humidity": humidity})
-  with open("reading.json", "w") as outfile: 
+  reading.update({"humidity(RH)": humidity})
+
+  tempAndPressure = readTempAndPressure()
+  #print(tempAndPressure)
+  temperature2 = tempAndPressure[0]
+  reading.update({"temperature 2(*C)":temperature2})
+  pressure = tempAndPressure[1]
+  reading.update({"Pressure(hPa)":pressure})
+
+  with open(file, "w") as outfile: 
     json.dump(reading, outfile)
-  print('Sensor readings: ', reading)
+  #print('Sensor readings: ', reading)
   #print(reading)
 
 #print(os.path.abspath('../'))

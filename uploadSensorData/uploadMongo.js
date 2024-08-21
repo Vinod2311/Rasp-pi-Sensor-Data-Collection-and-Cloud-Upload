@@ -1,6 +1,6 @@
 import pkg from 'realm';
 const { App,Credentials} = pkg;
-import data from '../reading.json' with { type: 'json' };
+import data from '../readingMongo.json' with { type: 'json' };
 
 
 

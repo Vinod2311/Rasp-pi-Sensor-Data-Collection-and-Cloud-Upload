@@ -5,7 +5,7 @@ import board
 
 
 def readTempandHumidity():
-  dht_device = adafruit_dht.DHT22(board.D17)
+  dht_device = adafruit_dht.DHT22(board.D17, use_pulseio=False)
   result = None
   while result == None:
     try:

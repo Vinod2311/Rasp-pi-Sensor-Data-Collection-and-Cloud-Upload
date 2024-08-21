@@ -22,7 +22,10 @@ def readData():
   
   pot = MCP3008(0)
   reading = pot.value
+  sleep(1)
   print(reading)
   return reading
 
-readData()
+while True:
+
+  readData()

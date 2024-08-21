@@ -1,8 +1,14 @@
 
-import data from '../reading.json' with { type: 'json' };
-import { initializeApp } from 'firebase/app'
+import data from '../readingFirebase.json' with { type: 'json' };
+import {getStorage,ref as refStorage,uploadBytes}  from 'firebase/storage'
+import { initializeApp,deleteApp } from 'firebase/app'
 import { getAuth, createUserWithEmailAndPassword,signInWithEmailAndPassword } from "firebase/auth"
 import { getDatabase, set, push, child, update, ref } from "firebase/database";
+import * as fs from 'node:fs'
+import path from 'node:path';
+
+//const x = path.resolve(import.meta.dirname, '../file.xml')
+//console.log(x)
 
 
 
@@ -23,15 +29,26 @@ const currentUser = {
   email: "sample@sample.com",
   password: "secret"
 };
-console.log(currentUser["email"])
 
 var userFirebase
 
-const firebaseApp = initializeApp(firebaseConfig)
+var firebaseApp = initializeApp(firebaseConfig)
 
 const firebaseDatabase = getDatabase(firebaseApp);
 
 const firebaseAuth = getAuth(firebaseApp)
+
+const firebaseStorage = getStorage(firebaseApp)
+
+
+async function uploadImage() {
+  const imagePath = path.resolve(import.meta.dirname, '../foo.jpg')
+  const data = fs.readFileSync(imagePath)
+  const storageRef = refStorage(firebaseStorage,'test.jpg')
+  await uploadBytes(storageRef, data).then((snapshot) => {
+    console.log('Uploaded a file!');
+  })
+}
 
 async function createUserFirebase(){
   var emailAlreadyInUse = false
@@ -54,35 +71,44 @@ async function signInUserFirebase(){
   await signInWithEmailAndPassword(firebaseAuth,currentUser["email"],currentUser["password"]).then
   ((userCredentials) => {
     userFirebase = userCredentials.user
-    console.log(userFirebase)
+    //console.log(userFirebase)
   }).catch((error) => {
     const errorCode = error.code
     console.log(errorCode)
+    return
+    
   })
 }
 
 //createUserFirebase()
 
 async function uploadDataFirebase(){
-  await createUserFirebase()
-  const firebaseData = {
-   
-    ...data,
-    timestamp: Date.now(),
-    ownerName: currentUser["fName"] + " " + currentUser["lName"],
-    raspberryId: "To be filled"
+  try {
+    await createUserFirebase()
+    await uploadImage()
+    const firebaseData = {
+    
+      ...data,
+      timestamp: Date.now(),
+      ownerName: currentUser["fName"] + " " + currentUser["lName"],
+      raspberryId: "To be filled"
+    }
+    const userData = {fName: currentUser["fName"], lName: currentUser["lName"], email: currentUser["email"]}
+    //console.log(firebaseData)
+    await update(ref(firebaseDatabase,'users/' + userFirebase.uid +'/'  ),userData)
+    const result = await set(ref(firebaseDatabase,'users/' + userFirebase.uid +'/readings/'+  firebaseData.timestamp.toString()  ),firebaseData)
+    //deleteApp(firebaseApp)
+    //return
+  } catch(error){
+    console.error(error)
+  } finally {
+    console.log("exit")
+    //await deleteApp(firebaseApp)
+    process.exit()
   }
-  console.log(firebaseData)
-  //console.log(ref(firebaseDatabase,'users/' + userFirebase.uid))
-  //const db = getDatabase() 
-  //const key = push(child(ref(firebaseDatabase), 'users')).key
-  //console.log(key)
-  //const updateData = {}
-  //console.log(`/users/${currentUser.fName}`)
-  //updateData['/users/${currentUser[fName]}' ] = firebaseData
-  set(ref(firebaseDatabase,'users/' + userFirebase.uid +'/'+ firebaseData.time.toString()  ),firebaseData)
-  return 
-}
+  
+
+};
 
 uploadDataFirebase()
 
