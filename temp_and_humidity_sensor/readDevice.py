@@ -1,4 +1,4 @@
-import time
+
 import adafruit_dht
 import board
 
@@ -14,12 +14,12 @@ def readTempandHumidity():
       result = temperature,humidity
     except RuntimeError as err:
       error = err.args[0]
+      print(error)
       pass
-      #print(err.args[0])
-  #print(type(result))
-  #print(result)
+      
   dht_device.exit()
   return result
+
 
 #readTempandHumidity()
 

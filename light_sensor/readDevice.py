@@ -1,6 +1,6 @@
 import smbus 
-import time 
 
+#Address for settings
 DEVICE     = 0x23 
 POWER_DOWN = 0x00 
 POWER_ON   = 0x01 
@@ -28,9 +28,10 @@ def readDevice(addr=DEVICE):
 def readLightIntensity():    
   try: 
     lightLevel = round(readDevice(),2)
-    #print("Light Level : {:.2f}lx".format(lightLevel)) 
+    
   except RuntimeError as err:
       error = err.args[0]
+      print(error)
   return lightLevel
 
 #readLight() 

@@ -1,18 +1,14 @@
 
 import data from '../readingFirebase.json' with { type: 'json' };
+import userData from '../user.json' with { type: 'json' };
 import {getStorage,ref as refStorage,uploadBytes}  from 'firebase/storage'
-import { initializeApp,deleteApp } from 'firebase/app'
+import { initializeApp} from 'firebase/app'
 import { getAuth, createUserWithEmailAndPassword,signInWithEmailAndPassword } from "firebase/auth"
-import { getDatabase, set, get, push, child, update, ref, onValue } from "firebase/database";
+import { getDatabase, set, get, child, update, ref } from "firebase/database";
 import * as fs from 'node:fs'
 import path from 'node:path';
 
-
-//const x = path.resolve(import.meta.dirname, '../file.xml')
-//console.log(x)
-
-
-
+//Public API for database
 const firebaseConfig = {
   apiKey: "AIzaSyCHfnIcqTbOKuKtizPN4qUp6_AuwABENF8",
   authDomain: "raspberry-pi-plant-monitoring.firebaseapp.com",
@@ -24,21 +20,13 @@ const firebaseConfig = {
   measurementId: "G-XZ4ZSM1J4X"
 };
 
-const currentUser = {
-  fName: "Joe",
-  lName: "Bloggs",
-  email: "test@test.com",
-  password: "secret"
-};
+const currentUser = userData.currentUser
 
+//Initialise firebase instance
 var userFirebase
-
 var firebaseApp = initializeApp(firebaseConfig)
-
 const firebaseDatabase = getDatabase(firebaseApp);
-
 const firebaseAuth = getAuth(firebaseApp)
-
 const firebaseStorage = getStorage(firebaseApp)
 
 
@@ -59,7 +47,6 @@ async function createUserFirebase(){
     console.log(userFirebase)
   })
   .catch((error) => {
-    const errorCode = error.code
     console.log(error.code)
     emailAlreadyInUse = true
   })
@@ -72,7 +59,6 @@ async function signInUserFirebase(){
   await signInWithEmailAndPassword(firebaseAuth,currentUser["email"],currentUser["password"]).then
   ((userCredentials) => {
     userFirebase = userCredentials.user
-    //console.log(userFirebase)
   }).catch((error) => {
     const errorCode = error.code
     console.log(errorCode)
@@ -81,7 +67,7 @@ async function signInUserFirebase(){
   })
 }
 
-//createUserFirebase()
+
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
@@ -91,22 +77,16 @@ async function uploadDataFirebase(){
     await createUserFirebase()
     //await uploadImage()
     const firebaseData = {
-    
       ...data,
       timestamp: Date.now(),
       ownerName: currentUser["fName"] + " " + currentUser["lName"],
-      
     }
     const userData = {fName: currentUser["fName"], lName: currentUser["lName"], email: currentUser["email"]}
-    //console.log(firebaseData)
     await update(ref(firebaseDatabase,'users/' + userFirebase.uid +'/'  ),userData)
-    const result = await set(ref(firebaseDatabase,'users/' + userFirebase.uid +'/readings/'+  firebaseData.timestamp.toString()  ),firebaseData)
-    //await find(ref(firebaseDatabase,'users/' + userFirebase.uid +'/config/' ),)
+    const result = await set(ref(firebaseDatabase,'users/' + userFirebase.uid + '/' + currentUser.raspberryPiName + '/reading'  ),firebaseData)
     const dbRef = ref(firebaseDatabase);
-    await get(child(dbRef, `users/${userFirebase.uid}/config`)).then(async (snapshot) => {
+    await get(child(dbRef, `users/${userFirebase.uid}/${currentUser.raspberryPiName}/config`)).then(async (snapshot) => {
     if (snapshot.exists()) {
-      
-      console.log(snapshot.val());
       await sleep(snapshot.val().firebaseDBFrequency*1000)
     } else {
       console.log("No data available");
@@ -114,17 +94,13 @@ async function uploadDataFirebase(){
     }).catch((error) => {
       console.error(error);
     });
-    //deleteApp(firebaseApp)
-    //return
   } catch(error){
     console.error(error)
   } finally {
     console.log("exit")
-    //await deleteApp(firebaseApp)
     
   }
   process.exit()
-
 };
 
 uploadDataFirebase()

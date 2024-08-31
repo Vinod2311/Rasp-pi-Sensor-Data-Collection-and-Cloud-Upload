@@ -1,1 +1,0 @@
-{"_id":{"$oid":"66c5ba6abe4d79c93f6307ce"},"raspberryPiName":"raspi 11","owner_id":"66c4881adb9532821c24406b","sensors":[{"sensorName":"BH170 - light sensor","firebaseDBFrequency":{"$numberInt":"10"},"mongoDBFrequency":{"$numberInt":"1"}}]}

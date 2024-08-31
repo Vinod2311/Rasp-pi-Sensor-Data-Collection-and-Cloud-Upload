@@ -1,0 +1,10 @@
+{
+  "currentUser": {
+    "fName": "Joe",
+    "lName": "Bloggs",
+    "email": "test@test.com",
+    "password": "secret",
+    "raspberryPiName": "raspi 1"
+  }
+  
+}

@@ -12,4 +12,4 @@ def readTempAndPressure():
     temperature = bmp280.get_temperature()
     pressure = bmp280.get_pressure()
     return round(temperature,2),round(pressure,2)
-    #print(f"{temperature:05.2f}*C {pressure:05.2f}hPa")
+    

@@ -1,5 +1,5 @@
 from PiAnalog import *
-import time
+
 
 #PiAnalog is used to measure the resistance of the photoresistor.
 #In my setup the capacitor is 1.0 microfarad and the resistors are 220 ohms as inputed below.

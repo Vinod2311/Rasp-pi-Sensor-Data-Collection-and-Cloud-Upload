@@ -1,19 +1,13 @@
 import pkg from 'realm';
 const { App,Credentials} = pkg;
 import data from '../readingMongo.json' with { type: 'json' };
+import userData from '../user.json' with { type: 'json' };
 
 
 
+const currentUser = userData.currentUser
 
-const currentUser = {
-  fName: "Joe",
-  lName: "Bloggs",
-  email: "test@test.com",
-  password: "secret",
-  raspberryPiName: "raspi 1"
-};
-
-// Initialize your Mongo App.
+// Initialize mongo app
 const monogoApp = new App({
   id: "application-1-dkzsnxq",
 });
@@ -24,7 +18,6 @@ function sleep(ms) {
 
 async function uploadData(){
   try {
-    //app.emailPasswordAuth.registerUser("joe@bloggs.com","secret")
     const credentials = Credentials.emailPassword(currentUser["email"],currentUser["password"])
     const user = await monogoApp.logIn(credentials)
     const raspberryCollection = await user.mongoClient("mongodb-atlas").db("Raspberry_pi").collection("Devices")
@@ -35,9 +28,7 @@ async function uploadData(){
     data['raspberryId'] = (raspberryPi._id).toString()
     data['ownerId'] = user.id
     const result = await collection.insertOne(data)
-    console.log(raspberryPi.timings.mongoDBFrequency*3600000)
     await sleep(raspberryPi.timings.mongoDBFrequency*60000)
-    //console.log(result)
     console.log("Upload Successful")
   } catch (error){
     console.error(error)

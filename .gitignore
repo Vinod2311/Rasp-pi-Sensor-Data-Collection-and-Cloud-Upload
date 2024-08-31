@@ -8,5 +8,8 @@ photos
 .vscode
 **/__pycache__
 dummy.py
-**/__pycache__
+.vscode
 **/node_modules
+launcher.sh
+nohup.out
+**/.vscode/

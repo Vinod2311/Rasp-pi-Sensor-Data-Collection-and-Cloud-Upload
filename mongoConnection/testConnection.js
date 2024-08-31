@@ -1,21 +1,15 @@
 import pkg from 'realm';
 const { App, Credentials } = pkg;
+import userData from '../user.json' with { type: 'json' };
 
-
-
-// Initialize your App.
+// Initialize mongoDB App
 const app = new App({
   id: "application-1-dkzsnxq",
 });
 
-
 //User details
-const currentUser = {
-  "fName": "Joe",
-  "lName": "bloggs",
-  "email": "sample@sample.com",
-  "password": "secret"
-};
+const currentUser = userData.currentUser
+
 
 async function ConnectToAppService(){
   try {
@@ -35,6 +29,6 @@ async function ConnectToAppService(){
 
 ConnectToAppService()
 
-//readPythonScript()
+
 
 
