@@ -1,14 +1,19 @@
 from picamera import PiCamera
-import time
+
+import sys
+import os
 
 
-camera = PiCamera()
-camera.resolution = (1024, 768)
 
 #start camera and wait for it to be ready
-camera.start_preview()
-time.sleep(2)
+def takePhoto():
+  camera = PiCamera()
+  camera.resolution = (640, 480)
+  camera.start_preview()
+  path = os.path.abspath('photos/image.jpg')
+  camera.capture(path)
+  camera.stop_preview()
+  camera.close()
+  
 
-timeStamp =time.time()
-path = 'photos/'+str(timeStamp) +'.jpg'
-camera.capture(path)
+#takePhoto()

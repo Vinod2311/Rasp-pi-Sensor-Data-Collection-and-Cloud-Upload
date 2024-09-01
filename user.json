@@ -5,6 +5,13 @@
     "email": "test@test.com",
     "password": "secret",
     "raspberryPiName": "raspi 1"
+  },
+  "sensors": {
+    "SEN0183-soilMoisture" :true,
+    "BH170-lightSensor": true,
+    "BMP280-tempAndPressure": true,
+    "DHT22-tempAndHumidity":false,
+    "PiCamera": true
   }
   
 }

@@ -4,7 +4,6 @@ vinod.code-workspace
 mongoConnection/mongo*
 mongodb-realm
 uploadSensorData/node_modules
-photos
 .vscode
 **/__pycache__
 dummy.py

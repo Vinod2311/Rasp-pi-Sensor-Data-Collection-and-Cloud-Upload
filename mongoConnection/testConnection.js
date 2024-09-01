@@ -19,7 +19,14 @@ async function ConnectToAppService(){
     const count = await collection.count()
     if (count == 1){
       console.log("Connection with mongoDB App Service estabilised")
-    } else{
+      /*reading = dict()
+      const collectionDevices = await user.mongoClient("mongodb-atlas").db("Raspberry_pi").collection(user.id)
+      const devices = await collectionDevices.findOne({raspberryPiName: userData.currentUser.raspberryPiName})
+      let sensors = {}
+      for (sensor in devices.sensors) {
+        sensors[]
+      }
+      userData.sensors = devices.sensors */
       console.error(error)
     }
   } catch (error){

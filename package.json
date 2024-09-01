@@ -4,12 +4,15 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "node"
   },
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "realm": "10.0.0"
+    "firebase": "^10.12.5",
+    "realm": "10.0.0",
+    "uuid": "^10.0.0"
   }
 }

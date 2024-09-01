@@ -11,23 +11,30 @@ import json
 
 def writeReadingData(file):
   reading = dict()
-  soilMoisture = readSoilMoisture()
-  reading.update({"soilMoisture(RH)": soilMoisture})
+  with open('user.json') as json_file:
+    userData = json.load(json_file)
+    
+    if userData["sensors"]["SEN0183-soilMoisture"] == True :
+      soilMoisture = readSoilMoisture()
+      reading.update({"soilMoisture(RH)": soilMoisture})
+      
+    if userData["sensors"]["BH170-lightSensor"] == True :
+      lightIntensity = readLightIntensity()
+      reading.update({"lightIntensity(lux)": lightIntensity})
 
-  lightIntensity = readLightIntensity()
-  reading.update({"lightIntensity(lux)": lightIntensity})
+    #if userData["sensors"]["DHT22-tempAndHumidity"] == True :
+      #tempAndHumidity = readTempandHumidity()
+      #temperature = tempAndHumidity[0]
+      #reading.update({"temperature DHT22(*C)": temperature})
+      #humidity = tempAndHumidity[1]
+      #reading.update({"humidity(RH)": humidity})
 
-  #tempAndHumidity = readTempandHumidity()
-  #temperature = tempAndHumidity[0]
-  #reading.update({"temperature DHT22(*C)": temperature})
-  #humidity = tempAndHumidity[1]
-  #reading.update({"humidity(RH)": humidity})
-
-  tempAndPressure = readTempAndPressure()
-  temperature2 = tempAndPressure[0]
-  reading.update({"temperature BMP280(*C)":temperature2})
-  pressure = tempAndPressure[1]
-  reading.update({"Pressure(hPa)":pressure})
+    if userData["sensors"]["BMP280-tempAndPressure"] == True :
+      tempAndPressure = readTempAndPressure()
+      temperature2 = tempAndPressure[0]
+      reading.update({"temperature BMP280(*C)":temperature2})
+      pressure = tempAndPressure[1]
+      reading.update({"Pressure(hPa)":pressure})
 
   with open(file, "w") as outfile: 
     json.dump(reading, outfile)

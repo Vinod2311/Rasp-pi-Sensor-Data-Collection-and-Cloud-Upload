@@ -34,5 +34,5 @@ def readLightIntensity():
       print(error)
   return lightLevel
 
-#readLight() 
+readLightIntensity() 
 
